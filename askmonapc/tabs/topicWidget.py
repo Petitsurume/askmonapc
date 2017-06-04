@@ -3,10 +3,12 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import QSize
 from askmonapc import const
 import requests
+import datetime
 class ResponseWidget(QWidget):
     def __init__(self, response_info):
         super(ResponseWidget, self).__init__()
         self.spacer1 = QVBoxLayout(self)
+        # --- 名前欄
         self.spacer_name = QHBoxLayout()
         self.widget_num = QLabel(self)
         self.widget_num.setText(str(response_info.get("r_id", -1))+".")
@@ -15,8 +17,12 @@ class ResponseWidget(QWidget):
         self.widget_name.setStyleSheet("QLabel {color: #080;}")
         self.widget_name.setText(response_info.get("u_name", "名無し")+response_info.get("u_dan", "さん"))
         self.spacer_name.addWidget(self.widget_name)
+        self.widget_resdate = QLabel(self)
+        self.widget_resdate.setText(": "+datetime.datetime.fromtimestamp(response_info.get("created", 0)).strftime("%Y/%m/%d %H:%M:%S"))
+        self.spacer_name.addWidget(self.widget_resdate)
         self.spacer_name.addStretch(1)
         self.spacer1.addLayout(self.spacer_name)
+        # --- 本文
         self.widget_body = QLabel(self)
         self.widget_body.setText(response_info.get("response", ""))
         self.widget_body.setWordWrap(True)
