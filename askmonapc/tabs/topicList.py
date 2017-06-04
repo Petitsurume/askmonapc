@@ -26,7 +26,7 @@ class TopicList(QTreeView):
         for topic in self.topics:
             title_item = QStandardItem(topic.get("title", "(無題)"))
             title_item.setEditable(False)
-            ikioi_item = QStandardItem(str(int(topic.get("count", 0) / ((int(datetime.datetime.now().strftime("%s")) - topic.get("created", 0))/60) * 60 * 24 * 1000000) / 1000000))
+            ikioi_item = QStandardItem(str(int(topic.get("count", 0) / ((int(datetime.datetime.now().timestamp()) - topic.get("created", 0))/60) * 60 * 24 * 1000000) / 1000000))
             ikioi_item.setEditable(False)
             age_item = QStandardItem(datetime.datetime.fromtimestamp(topic.get("updated")).strftime("%Y/%m/%d %H:%M:%S"))
             age_item.setEditable(False)
