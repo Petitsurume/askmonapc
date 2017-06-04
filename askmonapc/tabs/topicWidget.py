@@ -14,6 +14,7 @@ class ResponseWidget(QWidget):
         self.widget_name = QLabel(self)
         self.widget_name.setText(response_info.get("u_name", "名無し")+response_info.get("u_dan", "さん"))
         self.spacer_name.addWidget(self.widget_name)
+        self.spacer_name.addStretch(1)
         self.spacer1.addLayout(self.spacer_name)
         self.widget_body = QLabel(self)
         self.widget_body.setText(response_info.get("response", ""))
