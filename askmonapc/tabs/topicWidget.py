@@ -36,6 +36,8 @@ class ResponseWidget(QWidget):
         message = message.replace("<", "&lt;")
         message = message.replace(">", "&gt;")
         message = message.replace("\n", "<br>")
+        # TODO: imgurのインライン表示対応
+        # HTTP(S)の画像そのまま指定ではダメっぽいのでローカルに取得？
         # message = re.sub(r'https?://(i\.)?imgur\.com/[A-Za-z0-9_]+.(jpeg|jpg|png|gif)', '<a href="$0"><img src="$0" /></a>', message)
         return message
 class TopicWidget(QListWidget):
@@ -44,6 +46,7 @@ class TopicWidget(QListWidget):
         self.topic_info = topic_info
         self.responses = []
         self.setWindowTitle(self.topic_info.get("title", "無題のトピック") + " - AskMonaPC")
+        self.resize(640, 600)
         self.reload()
     def reload(self):
         self.responses = requests.get(const.API_URL+"responses/list", params = {
