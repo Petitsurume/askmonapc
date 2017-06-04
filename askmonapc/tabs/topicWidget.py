@@ -12,6 +12,7 @@ class ResponseWidget(QWidget):
         self.widget_num.setText(str(response_info.get("r_id", -1))+".")
         self.spacer_name.addWidget(self.widget_num)
         self.widget_name = QLabel(self)
+        self.widget_name.setStyleSheet("QLabel {color: #080;}")
         self.widget_name.setText(response_info.get("u_name", "名無し")+response_info.get("u_dan", "さん"))
         self.spacer_name.addWidget(self.widget_name)
         self.spacer_name.addStretch(1)
