@@ -1,9 +1,10 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
-from PyQt5.QtCore import QSize
+from PyQt5.QtCore import QSize, Qt
 from askmonapc import const
 import requests
 import datetime
+import re
 class ResponseWidget(QWidget):
     def __init__(self, response_info):
         super(ResponseWidget, self).__init__()
@@ -24,10 +25,19 @@ class ResponseWidget(QWidget):
         self.spacer1.addLayout(self.spacer_name)
         # --- 本文
         self.widget_body = QLabel(self)
-        self.widget_body.setText(response_info.get("response", ""))
+        self.widget_body.setText(ResponseWidget.torich(response_info.get("response", "")))
         self.widget_body.setWordWrap(True)
+        self.widget_body.setTextFormat(Qt.RichText)
+        self.widget_body.setOpenExternalLinks(True)
         self.spacer1.addWidget(self.widget_body)
         self.setLayout(self.spacer1)
+    def torich(message):
+        message = message.replace("&", "&amp;")
+        message = message.replace("<", "&lt;")
+        message = message.replace(">", "&gt;")
+        message = message.replace("\n", "<br>")
+        # message = re.sub(r'https?://(i\.)?imgur\.com/[A-Za-z0-9_]+.(jpeg|jpg|png|gif)', '<a href="$0"><img src="$0" /></a>', message)
+        return message
 class TopicWidget(QListWidget):
     def __init__(self, topic_info):
         super(TopicWidget, self).__init__()
