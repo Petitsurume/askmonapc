@@ -16,7 +16,7 @@ class ResponseWidget(QWidget):
         self.spacer_name.addWidget(self.widget_num)
         self.widget_name = QLabel(self)
         self.widget_name.setStyleSheet("QLabel {color: #080;}")
-        self.widget_name.setText(response_info.get("u_name", "名無し")+response_info.get("u_dan", "さん"))
+        self.widget_name.setText(response_info.get("u_name", "名無し")+response_info.get("u_dan", "さん")+" ("+str(response_info.get("u_id"))+")")
         self.spacer_name.addWidget(self.widget_name)
         self.widget_resdate = QLabel(self)
         self.widget_resdate.setText(": "+datetime.datetime.fromtimestamp(response_info.get("created", 0)).strftime("%Y/%m/%d %H:%M:%S"))
