@@ -7,7 +7,6 @@
 
 1. Pythonを入れる。 3.6以上が望ましい(3.5でも動くはず。それより下は知らん)
 1. pipも入れる(もう入ってたら入れなくてもOK、`pip3`でCommand not foundみたいなこと言われなければ入ってるはず)
-1. `pip3 install --upgrade --pre -f https://wxpython.org/Phoenix/snapshot-builds/ wxPython_Phoenix`
 1. `pip3 install -r ./requirements.txt`
 1. どうにかしてこのリポジトリを落とす(`git clone`でもいいし、Download ZIPから落としてもいい)
 1. `run.py`を実行する
