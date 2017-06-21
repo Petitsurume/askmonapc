@@ -4,6 +4,14 @@ from askmonapc import const
 import requests
 import datetime
 import re
+
+def watanabe2mona(watanabe):
+    print(watanabe)
+    watanabe = int(watanabe)
+    r = ""
+    r = "%d.%d" % (watanabe/100000000, watanabe%100000000)
+    r = re.sub(r"\.?0+$", "", r)
+    return r
 class ResponseWidget(wx.Panel):
     def __init__(self, response_info, parent=None):
         super(ResponseWidget, self).__init__(parent)
@@ -17,10 +25,41 @@ class ResponseWidget(wx.Panel):
         self.widget_name = wx.StaticText(self, label=response_info.get("u_name", "名無し")+response_info.get("u_dan", "さん")+" ("+str(response_info.get("u_id"))+")")
         self.widget_name.SetForegroundColour("#008800")
         self.widget_resdate = wx.StaticText(self, label=": "+datetime.datetime.fromtimestamp(response_info.get("created", 0)).strftime("%Y/%m/%d %H:%M:%S"))
-        self.spacer_name.AddMany([self.widget_num, self.widget_name, self.widget_resdate])
+        self.widget_sendmona = wx.StaticText(self, label="+"+watanabe2mona(response_info.get("receive","0"))+"mona")
+        self.spacer_name.AddMany([self.widget_num, self.widget_name, self.widget_resdate, self.widget_sendmona])
         self.spacer1.Add(self.spacer_name)
         # --- 本文
         self.widget_body = wx.StaticText(self, label=ResponseWidget.torich(response_info.get("response", "")))
+        recvmona = int(response_info.get("receive","0"))/100000000
+        base_fontsize = 12 / 0.85
+        fontinfo = wx.FontInfo(base_fontsize)
+        lv = 0
+        if recvmona > 10:
+            lv = 4
+        elif recvmona > 2:
+            lv = 3
+        elif recvmona > 1:
+            lv = 2
+        elif recvmona > 0:
+            lv = 1
+        if lv == 0:
+            # lv0
+            fontinfo = wx.FontInfo(base_fontsize * 0.85)
+        if lv == 1:
+            # lv1
+            # 何もしない
+            fontinfo = fontinfo
+        elif lv == 2:
+            # lv2
+            fontinfo = fontinfo.Bold()
+        elif lv == 3:
+            # lv3
+            fontinfo = wx.FontInfo(base_fontsize * 1.25).Bold()
+        elif lv == 4:
+            # lv4
+            fontinfo = wx.FontInfo(base_fontsize * 1.25)
+            self.widget_body.SetForegroundColour("#2222ff")
+        self.widget_body.SetFont(wx.Font(fontinfo))
         self.spacer1.Add(self.widget_body)
         self.spacer1.AddSpacer(10)
         self.spacer0.Add(self.spacer1)
