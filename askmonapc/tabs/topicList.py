@@ -6,7 +6,7 @@ from .topicWidget import TopicWidget
 from askmonapc.utils import *
 class TopicList(wx.ListCtrl):
     def __init__(self,parent = None):
-        super(TopicList, self).__init__(parent, style=wx.LC_REPORT | wx.LC_HRULES | wx.LC_SINGLE_SEL)
+        super(TopicList, self).__init__(parent, style=wx.LC_REPORT | wx.LC_SINGLE_SEL)
         self.topics = []
         self.InsertColumn(0, "トピック名")
         self.InsertColumn(1, "勢い")
