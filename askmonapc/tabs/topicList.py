@@ -15,8 +15,8 @@ class TopicList(wx.ListCtrl):
         @bind(self, wx.EVT_LIST_ITEM_ACTIVATED)
         def activated(e):
             topic = self.topics[self.GetFirstSelected()]
-            self.topicWidget = TopicWidget(topic, self)
-            self.topicWidget.Show()
+            topicWidget = TopicWidget(topic, parent)
+            parent.AddPage(topicWidget, topicWidget.topic_info.get("title", "無題のトピック"))
     def reload(self):
         self.topics = requests.get(const.API_URL+"topics/list",headers = const.HTTP_HEADERS).json().get("topics", [])
         def mapfunc(item):

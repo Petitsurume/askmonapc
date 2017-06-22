@@ -6,7 +6,6 @@ import datetime
 import re
 
 def watanabe2mona(watanabe):
-    print(watanabe)
     watanabe = int(watanabe)
     r = ""
     r = "%d.%d" % (watanabe/100000000, watanabe%100000000)
@@ -63,6 +62,7 @@ class ResponseWidget(wx.Panel):
         self.spacer1.Add(self.widget_body)
         self.spacer1.AddSpacer(10)
         self.spacer0.Add(self.spacer1)
+        self.spacer0.AddSpacer(10000)
         self.SetSizer(self.spacer0)
     def torich(message):
         return message
@@ -74,19 +74,14 @@ class ResponseWidget(wx.Panel):
         # HTTP(S)の画像そのまま指定ではダメっぽいのでローカルに取得？
         # message = re.sub(r'https?://(i\.)?imgur\.com/[A-Za-z0-9_]+.(jpeg|jpg|png|gif)', '<a href="$0"><img src="$0" /></a>', message)
         return message
-class TopicWidget(wx.Frame):
+class ResponseListWidget(wx.lib.scrolledpanel.ScrolledPanel):
     def __init__(self, topic_info, parent = None):
-        super(TopicWidget, self).__init__(parent)
+        super(ResponseListWidget, self).__init__(parent)
         self.topic_info = topic_info
-        self.responses = []
-        self.SetTitle(self.topic_info.get("title", "無題のトピック") + " - AskMonaPC")
-        self.SetSizeWH(640, 600)
-        self.layout = wx.BoxSizer(wx.VERTICAL)
-        self.layout_panel = wx.lib.scrolledpanel.ScrolledPanel(self)
-        self.layout_panel.SetupScrolling(scroll_x=False)
-        self.layout_res = wx.BoxSizer(wx.VERTICAL)
-        self.layout_panel.SetSizer(self.layout_res)
-        self.layout.Add(self.layout_panel)
+        self.SetupScrolling(scroll_x=False)
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.SetSizer(self.sizer)
+        self.SetBackgroundColour("#eeeeee")
         self.reload()
     def reload(self):
         self.responses = requests.get(const.API_URL+"responses/list", params = {
@@ -95,5 +90,16 @@ class TopicWidget(wx.Frame):
         }, headers = const.HTTP_HEADERS).json()
         print(self.responses)
         for response in self.responses.get("responses", []):
-            wid = ResponseWidget(response, self.layout_panel)
-            self.layout_res.Add(wid)
+            wid = ResponseWidget(response, self)
+            self.sizer.Add(wid)
+        self.Layout()
+class TopicWidget(wx.Panel):
+    def __init__(self, topic_info, parent = None):
+        super(TopicWidget, self).__init__(parent)
+        self.SetBackgroundColour("#ffffff")
+        self.topic_info = topic_info
+        self.responses = []
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.sizer.Add(ResponseListWidget(topic_info, self),wx.EXPAND, 1)
+        self.sizer.Add(wx.TextCtrl(self))
+        self.SetSizer(self.sizer)
